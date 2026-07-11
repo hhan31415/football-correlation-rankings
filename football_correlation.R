@@ -56,13 +56,3 @@ ranked_table
 
 # output as csv file
 write.csv(ranked_table, file = "output/mls_correlation_results.csv", row.names = FALSE)
-
-# Plots for specific data frames
-plot(team_data$Touches.in.opposition.box, team_data$points,
-     xlab = "Touches in Opposition Box",
-     ylab = "Points",
-     main = "Touches in Opposition Box vs Points",
-     pch = 19, col = "steelblue")
-
-# Add a linear trend line on top
-abline(lm(points ~ Touches.in.opposition.box, data = team_data), col = "red", lwd = 2)
