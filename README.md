@@ -26,7 +26,7 @@ To do this, I combined all the previous csvs containing correlation data into on
    <chr>                          <dbl>   <dbl>  <dbl>   <dbl>    <dbl>    <dbl>    <dbl> <lgl>           <lgl>          
  1 Accurate.long.balls.per.match -0.299   0.151  0.450  -0.0647 2.00e- 1 9.86e- 1 5.84e- 1 FALSE           FALSE          
 ```
-which tells us that the stat "accurate long balls per match" has a decent range of R values with weak correlation across the 5 major leagues + the MLS. You can check the full table (arranged by range of R values) [here](output/team_stat_variability.csv) and the R file for this section [here](other_R_files/compare_leagues.R).
+which tells us that the stat "accurate long balls per match" has a decent range of R values with weak correlation across the 5 major leagues + the MLS. You can check the full table [here](output/team_stat_variability.csv) and the R file for this section [here](other_R_files/compare_leagues.R).
 
 Of course, this itself still may not be all that interesting, if the correlation is not significant. Indeed, the above statistic has a minimum p-value of 0.2 across the six leagues, so the correlation not significant. This shows us that throughout all six leagues, accurate long balls has basically shows no real evidence of a relationship with on-pitch success. 
 
