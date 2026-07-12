@@ -31,14 +31,14 @@ stat_variability <- all_leagues %>%
     max_p  = max(pearson_p),
     mean_p = mean(pearson_p),
   ) %>%
-  arrange(desc(range))
-  #arrange(desc(max_p))
+  #arrange(desc(range))
+  arrange(desc(max_p))
 
 # Show if stats are significant
 stat_variability <- stat_variability %>% 
   mutate(min_significant = if_else(min_p<0.05, TRUE, FALSE)) %>%
   mutate(max_significant = if_else(max_p<0.05, TRUE, FALSE))
-#print(stat_variability, n=30)
+print(stat_variability, n=30)
 
 write.csv(stat_variability, 
             file = paste0("output/team_stat_variability.csv"), 
