@@ -32,21 +32,21 @@ stat_variability <- all_leagues %>%
     mean_p = mean(pearson_p),
   ) %>%
   arrange(desc(range))
-  #arrange(desc(min_p))
+  #arrange(desc(max_p))
 
+# Show if stats are significant
+stat_variability <- stat_variability %>% 
+  mutate(min_significant = if_else(min_p<0.05, TRUE, FALSE)) %>%
+  mutate(max_significant = if_else(max_p<0.05, TRUE, FALSE))
+#print(stat_variability, n=30)
 
 write.csv(stat_variability, 
             file = paste0("output/team_stat_variability.csv"), 
             row.names = FALSE)
-# For ordering by min_p:
-# write.csv(stat_variability,
-#           file = paste0("output/team_stat_variability_minp.csv"),
-#           row.names = FALSE)
 
-# Grab the top 5 most variable stats
-top_variable_stats <- stat_variability$stat[1:10]
+# Arrange all_leagues by the top 17 stats (these are the stats that are not significant in at least one league) 
+top_variable_stats <- stat_variability$stat[1:17]
 
-# Pull every league's row for just those stats
 detail_view <- all_leagues %>%
   filter(stat %in% top_variable_stats) %>%
   select(league, stat, pearson_r2, pearson_r, pearson_p) %>%
