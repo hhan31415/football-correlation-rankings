@@ -3,6 +3,8 @@
 
 ## Contents
 - [Introduction](#introduction)
+- [Computing Correlation](#computing-correlation)
+- [Comparing Leagues](#comparing-leagues)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -13,6 +15,49 @@ Then for each league, we will use R to compute and compile the correlation betwe
 We then want to compare these correlation numbers across various leagues to explore if there is any meaningful difference between the games being played across Europe and the US. In particular, we want to see if there are statistics which have a highest variablity of R values across leagues while still maintaining significance. We will later see that a few non-trivial examples can pop up.
 
 ## Computing Correlation
+The main R file we will be working with is [football_correlation.R](football_correlation.R). The main part of this R script is the function league_correlation(csv_path, league_name, manual_exclude) which takes in arguments csv_path (str) the path for the csv, league_name (str) the name of the league for labelling, and manual_exclude (vec): a vector of specific columns to exclude, with default assignment 
+```
+c("team_id", "points", "wins", "draws", "losses", "table_position", "matches_played")
+```
+which are irrelevant stats like team_id (used internally by FotMob to track clubs) or directly correlating stats to success like wins.
+
+The function outputs a table of each relevant stat with five correlation values: Pearson's R, R^2, p-value, Spearman Rho, and Spearman p-value, which are then saved as a CSV. The following is such a table for the Premier League:
+| stat | pearson_r | pearson_r2 | pearson_p | spearman_rho | spearman_p | league |
+|---|---|---|---|---|---|---|
+| FotMob.rating | 0.89846258 | 0.807235002 | 7.498509e-08 | 0.77044860 | 7.052362e-05 | premier_league |
+| Goals.per.match | 0.90723050 | 0.823067179 | 3.437734e-08 | 0.82046608 | 9.400566e-06 | premier_league |
+| Goals.conceded.per.match | -0.89097401 | 0.793834690 | 1.383139e-07 | -0.69718606 | 6.344045e-04 | premier_league |
+| Average.possession | 0.73748014 | 0.543876960 | 2.067840e-04 | 0.73391089 | 2.301655e-04 | premier_league |
+| Clean.sheets | 0.81742146 | 0.668177847 | 1.080780e-05 | 0.61132044 | 4.185640e-03 | premier_league |
+| Attendance | 0.41576262 | 0.172858560 | 6.827582e-02 | 0.26646611 | 2.561136e-01 | premier_league |
+| Expected.goals | 0.76995536 | 0.592831259 | 7.175832e-05 | 0.72563087 | 2.932583e-04 | premier_league |
+| xG.difference | 0.86488588 | 0.748027582 | 8.638453e-07 | 0.72515081 | 2.973290e-04 | premier_league |
+| Shots.on.target.per.match | 0.82426661 | 0.679415452 | 7.869323e-06 | 0.76050602 | 9.927917e-05 | premier_league |
+| Big.chances | 0.77757427 | 0.604621751 | 5.462182e-05 | 0.66629007 | 1.338323e-03 | premier_league |
+| Big.chances.missed | 0.78830681 | 0.621427626 | 3.651691e-05 | 0.69905843 | 6.045943e-04 | premier_league |
+| Accurate.passes.per.match | 0.64218604 | 0.412402905 | 2.266045e-03 | 0.63153973 | 2.820520e-03 | premier_league |
+| Accurate.long.balls.per.match | -0.29925767 | 0.089555151 | 1.999254e-01 | -0.31972935 | 1.693808e-01 | premier_league |
+| Accurate.crosses.per.match | 0.03392909 | 0.001151183 | 8.870756e-01 | -0.17113773 | 4.706513e-01 | premier_league |
+| Penalties.awarded | 0.07599872 | 0.005775805 | 7.643902e-01 | 0.08059095 | 7.505690e-01 | premier_league |
+| Touches.in.opposition.box | 0.82544360 | 0.681357137 | 7.441404e-06 | 0.78283829 | 4.495741e-05 | premier_league |
+| Corners | 0.61640048 | 0.379949550 | 3.799819e-03 | 0.48681236 | 2.949727e-02 | premier_league |
+| Set.piece.goals | 0.61536222 | 0.378670666 | 3.876177e-03 | 0.41992179 | 6.528415e-02 | premier_league |
+| xG.conceded | -0.82988504 | 0.688709177 | 6.003340e-06 | -0.69227877 | 7.185065e-04 | premier_league |
+| Interceptions.per.match | -0.41799274 | 0.174717927 | 6.665918e-02 | -0.37646195 | 1.018349e-01 | premier_league |
+| Tackles.per.match | -0.46872238 | 0.219700668 | 3.710283e-02 | -0.52409653 | 1.769097e-02 | premier_league |
+| Clearances.per.match | -0.55166264 | 0.304331664 | 1.168207e-02 | -0.48474580 | 3.029827e-02 | premier_league |
+| Possession.won.final.3rd.per.match | 0.55096761 | 0.303565306 | 1.180991e-02 | 0.46113260 | 4.071417e-02 | premier_league |
+| Set.piece.goals.conceded | -0.12718712 | 0.016176565 | 5.930981e-01 | -0.06818278 | 7.751683e-01 | premier_league |
+| Saves.per.match | -0.69559924 | 0.483858300 | 6.606347e-04 | -0.44806326 | 4.756344e-02 | premier_league |
+| Fouls.per.match | -0.53628957 | 0.287606499 | 1.478526e-02 | -0.54905723 | 1.216715e-02 | premier_league |
+| Yellow.cards | -0.31941707 | 0.102027267 | 1.698211e-01 | -0.30496997 | 1.910573e-01 | premier_league |
+| goal_difference | 0.97186223 | 0.944516197 | 9.481978e-13 | 0.91337106 | 1.899175e-08 | premier_league |
+| Penalties.conceded | -0.52927149 | 0.280128306 | 1.979110e-02 | -0.49580653 | 3.086279e-02 | premier_league |
+| Red.cards | -0.15170975 | 0.023015850 | 5.610711e-01 | -0.29233629 | 2.548623e-01 | premier_league |
+
+The CSV files for the six leagues can be found [here](data/).
+
+In addition, there are two supplementary R files [scatterplot.R](other_R_files/scatterplot.R) and [correlation_matrix.R](other_R_files/correlation_matrix.R). The former creates a scatterplot with a linear trend line for a specific stat, and the latter creates a correlation matrix for all stats in a league. Both can be inserted into the main function of the football_correlation.R file to give these visualizations if desired.
 
 ## Comparing Leagues
 Now that we have the correlation values for each statistic, we want to compare these values across leagues to see if there are any meaningful differences between the leagues. In particular, the following are some examples of interesting observations we may look for:
@@ -36,6 +81,13 @@ In general, these thirtheen significant stats also have a generally strong corre
 ![](img/stats_correlation_1.png)
 ![](img/stats_correlation_2.png)
 The link to the relevant Tableau dashboard is [here](https://public.tableau.com/app/profile/heechan.han/viz/Top5LeaguesMLSCorrelationBetweenStatsandSuccess/StatsvsCorrelation1).
+
+## Interesting Observations
+The visualizations give us a really good idea of the differences between the leagues, especially between the top leagues in Europe vs the MLS. Note that the first four stats (average possession, xG conceded, accurate passes per match, clearances per match) enjoy a strong correlation and significant p-value across the top 5 leagues, yet in the MLS, the correlation is moderate to weak, with a nonsignificant p-value. A few observations may help explain these differences. First, the level of play in the top 5 leagues is generally much higher compared to the MLS, and thus stat like average possession and accurate passes can more efficently be converted to on-pitch success. In the same light, conceding more xG or haveing more clearances (and thus defending much more often) is more likely to be punished against higher-skilled opposition. 
+
+Another explanation may be given by the higher existence of parity between clubs at the highest levels of Europe. In these leagues, there are often a few giants (like Barcelona and Real Madrid for La Liga or Bayern Munich for the Bundesliga) which oftentimes are outliers which may contribute greatly to the overall correlation and significance of these data points. In contrast, the MLS is relatively much more balanced due to restrictions like the salary cap, and club performances between season tend to vary much more regularly. 
+
+I find it especially interesting how weak the correlation and high the p-value is for clearances per match for the MLS. Teams that don't boot away the ball more often are not that much more likely to have on-field success than those who clear the ball frequently. 
 
 ## Average Possession
 
