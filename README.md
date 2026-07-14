@@ -5,6 +5,7 @@
 - [Introduction](#introduction)
 - [Computing Correlation](#computing-correlation)
 - [Comparing Leagues](#comparing-leagues)
+- [Interesting Observations](#interesting-observations)
 - [Conclusion](#conclusion)
 
 ## Introduction
@@ -19,7 +20,7 @@ The main R file we will be working with is [football_correlation.R](football_cor
 ```
 c("team_id", "points", "wins", "draws", "losses", "table_position", "matches_played")
 ```
-which are irrelevant stats like team_id (used internally by FotMob to track clubs) or directly correlating stats to success like wins.
+which are irrelevant stats like team_id (used internally by FotMob to track clubs) or directly correlating stats to points like wins.
 
 The function outputs a table of each relevant stat with five correlation values: Pearson's R, R^2, p-value, Spearman Rho, and Spearman p-value, which are then saved as a CSV. The following is such a table for the Premier League:
 | stat | pearson_r | pearson_r2 | pearson_p | spearman_rho | spearman_p | league |
@@ -77,7 +78,7 @@ Of course, this itself still may not be all that interesting, if the correlation
 
 In fact, accurate long balls per match is one of two stats which show no significance (p < 0.5) across all six leagues, along with red cards. All other stats have at least one league which shows significance. Checking the table also shows that there are thirteen stats which show sigificance for _all_ six leagues; most of these are stats that obviously seem to have a real relationship with success like Goal difference and xG, although there are some more interesting stats like corners and big chances missed.
 
-In general, these thirtheen significant stats also have a generally strong correlation across all leagues, so we can take them as the "obvious" correlating stats in Europe and the MLS. Let us now turn to the stats which vary in correlation and significance across the leagues. We look at the remaining 17 stats and analyze the R and p-values for each stat across each league to see which league may be an outlier. The table for this data is [here](output/league_top_variable_stats.csv). The following is a Tableau visualization of the table:
+In general, these thirtheen significant stats also have a generally strong correlation across all leagues, so we can take them as the "obvious" correlating stats in Europe and the MLS. Let us now turn to the stats which vary in correlation and significance across the leagues. We look at the remaining 17 stats and analyze the R and p-values for each stat across each league to see which league may be an outlier. The table for this data is [here](output/league_top_variable_stats.csv). The following is a Tableau visualization of the table. This is the core deliverable of the project, distilling everything the correlation analysis was built to answer: which stats actually predict points, and where that relationship holds up (or breaks down) across leagues.
 ![](img/stats_correlation_1.png)
 ![](img/stats_correlation_2.png)
 The link to the relevant Tableau dashboard is [here](https://public.tableau.com/app/profile/heechan.han/viz/Top5LeaguesMLSCorrelationBetweenStatsandSuccess/StatsvsCorrelation1).
@@ -87,7 +88,12 @@ The visualizations give us a really good idea of the differences between the lea
 
 Another explanation may be given by the higher existence of parity between clubs at the highest levels of Europe. In these leagues, there are often a few giants (like Barcelona and Real Madrid for La Liga or Bayern Munich for the Bundesliga) which oftentimes are outliers which may contribute greatly to the overall correlation and significance of these data points. In contrast, the MLS is relatively much more balanced due to restrictions like the salary cap, and club performances between season tend to vary much more regularly. 
 
-I find it especially interesting how weak the correlation and high the p-value is for clearances per match for the MLS. Teams that don't boot away the ball more often are not that much more likely to have on-field success than those who clear the ball frequently. 
+Apart from the MLS - Europe dichotomy, there many of the other stats show discrepencies even within the top 5 leagues of Europe. I will mention a few which I thought were especially interesting: 
+- Set piece goals has strong correlation and significance in all leagues except for Ligue 1 and La Liga, while set piece goals conceded have strong correlation and significance in only Ligue 1, La Liga, and Serie A. 
+- Penalties awared has strong correlation and significance in the Bundesliga, while in the Premier League, the correlation is incredibly weak (R=0.076) and nonsignificant (p=0.7644); however,  the PL has strong correlation and significance for penalties conceded, while the Bundesliga has weak correlation and nonsignificance.
+- The Serie A is the only league with strong (positive) correlation and/or significance for accurate crosses; some leagues (like the La Liga and the MLS) even have negative correlation (albeit with nonsignificant p-value).
+- Tackles and interceptions have strong correlation and significance for the Bundelsiga, but incredibly weak correlation and nonsignificance for fouls and yellow cards; the exact opposite is true for La Liga, where fouls and yellow cards show moderate to strong corrrelation and significance, and tackles and interception show weak correlation and nonsignificance.
 
+I think it's especially interesting that many leagues seem to hold a sort of dichotomy of correlation and significance for certain related pairs of stats, like set piece goals scored vs conceded for Ligue 1 and La Liga, Penalties awared vs conceded in the PL and Bundesliga, and tackles and interceptions vs fouls and yellow cards in La Liga and Bundesliga.
 
 ## Conclusion
