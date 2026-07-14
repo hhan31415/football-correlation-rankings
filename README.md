@@ -1,4 +1,4 @@
-# Correlation Between Stats and Success Across Leagues
+# Correlation Analysis of Stats vs Success: Top 5 European Leagues and MLS
 ## by Heechan Han
 
 ## Contents
